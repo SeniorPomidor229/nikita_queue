@@ -1,10 +1,20 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import sqlite3
 
 app = FastAPI()
+
+# Настройка CORS политики
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 security = HTTPBasic()
 
@@ -166,9 +176,15 @@ create_table()
 def create_admin(username: str, password: str):
     conn = sqlite3.connect('queue.db')
     c = conn.cursor()
-    c.execute("INSERT INTO admins (username, password) VALUES (?, ?)",
-              (username, password))
-    conn.commit()
-    conn.close()
+    c.execute("SELECT COUNT(*) FROM admins WHERE username = ?", (username,))
+    count = c.fetchone()[0]
+    if count > 0:
+        print("Admin already exists.")
+    else:
+        c.execute("INSERT INTO admins (username, password) VALUES (?, ?)",
+        (username, password))
+        conn.commit()
+        print("Admin created successfully.")
+        conn.close()
 
 create_admin("admin", "admin")

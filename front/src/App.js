@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import QueueList from './components/QueueList';
+import QueueRegistration from './components/QueueRegistration';
+import AdminPanel from './components/AdminPanel';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Router>
+
+        <Navbar />
+
+        <main>
+          <Routes>
+            <Route path="/" element={<QueueList />} />
+            <Route path='/reg' element={<QueueRegistration/>} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+        </main>
+      </Router>
+
     </div>
   );
 }
