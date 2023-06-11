@@ -4,11 +4,6 @@ const Navbar = () => {
     return (
         <nav style={styles.navbar}>
             <div style={styles.logo}>Электронная очередь</div>
-            <ul style={styles.navLinks}>
-                <li style={styles.navLink}>Очереди</li>
-                <li style={styles.navLink}>О нас</li>
-                <li style={styles.navLink}>Контакты</li>
-            </ul>
         </nav>
     );
 };

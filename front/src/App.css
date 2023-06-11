@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.App{
+  color: white; 
+  font-size: 24px; 
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #00e6e6, 0 0 70px #00e6e6, 0 0 80px #00e6e6, 0 0 100px #00e6e6, 0 0 150px #00e6e6; 
+  animation: neon-animation 1.5s ease-in-out infinite alternate; 
+
+  @keyframes neon-animation {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #00e6e6, 0 0 70px #00e6e6, 0 0 80px #00e6e6, 0 0 100px #00e6e6, 0 0 150px #00e6e6;
+    }
+    to {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00e6e6, 0 0 35px #00e6e6, 0 0 40px #00e6e6, 0 0 50px #00e6e6, 0 0 75px #00e6e6;
+    }
+  }
+}

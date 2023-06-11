@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const AdminPanel = () => {
-    const [queueIdToDelete, setQueueIdToDelete] = useState('');
-    const [newQueue, setNewQueue] = useState({
-        id: '',
-        name: '',
-        max_capacity: 0,
-        is_public: true
-    });
     const [adminCredentials, setAdminCredentials] = useState({
         username: '',
         password: ''
     });
 
-    const handleQueueIdToDeleteChange = (event) => {
-        setQueueIdToDelete(event.target.value);
+    const [newQueue, setNewQueue] = useState({
+        id: uuidv4(),
+        name: '',
+        max_capacity: 0,
+        is_public: true
+    });
+
+    const handleAdminCredentialsChange = (event) => {
+        setAdminCredentials({
+            ...adminCredentials,
+            [event.target.name]: event.target.value
+        });
     };
 
     const handleNewQueueChange = (event) => {
@@ -24,16 +28,9 @@ const AdminPanel = () => {
         });
     };
 
-    const handleAdminCredentialsChange = (event) => {
-        setAdminCredentials({
-            ...adminCredentials,
-            [event.target.name]: event.target.value
-        });
-    };
-
     const handleDeleteQueue = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8080/queues/${queueIdToDelete}`, {
+            const response = await fetch(`http://127.0.0.1:8080/queues/${newQueue.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -44,6 +41,7 @@ const AdminPanel = () => {
 
             if (response.ok) {
                 console.log('Очередь успешно удалена');
+                // Выполните здесь любую другую логику после успешного удаления очереди
             } else {
                 console.log('Ошибка при удалении очереди:', response.statusText);
             }
@@ -68,6 +66,7 @@ const AdminPanel = () => {
 
             if (response.ok) {
                 console.log('Очередь успешно создана');
+                // Выполните здесь любую другую логику после успешного создания очереди
             } else {
                 console.log('Ошибка при создании очереди:', response.statusText);
             }
@@ -78,21 +77,8 @@ const AdminPanel = () => {
 
     return (
         <div style={styles.container}>
-            <h2 style={styles.heading}>Панель администратора</h2>
-            <div>
-                <h3>Удаление очереди</h3>
-                <div>
-                    <label htmlFor="queueIdToDelete" style={styles.label}>
-                        ID очереди:
-                    </label>
-                    <input
-                        type="text"
-                        id="queueIdToDelete"
-                        value={queueIdToDelete}
-                        onChange={handleQueueIdToDeleteChange}
-                        style={styles.input}
-                    />
-                </div>
+            <div style={styles.authBlock}>
+                <h2 style={styles.heading}>Аутентификация</h2>
                 <div>
                     <label htmlFor="adminUsername" style={styles.label}>
                         Имя пользователя:
@@ -119,25 +105,9 @@ const AdminPanel = () => {
                         style={styles.input}
                     />
                 </div>
-                <button onClick={handleDeleteQueue} style={styles.button}>
-                    Удалить очередь
-                </button>
             </div>
-            <div>
-                <h3>Создание новой очереди</h3>
-                <div>
-                    <label htmlFor="newQueueId" style={styles.label}>
-                        ID очереди:
-                    </label>
-                    <input
-                        type="text"
-                        id="newQueueId"
-                        value={newQueue.id}
-                        onChange={handleNewQueueChange}
-                        name="id"
-                        style={styles.input}
-                    />
-                </div>
+            <div style={styles.queueBlock}>
+                <h2 style={styles.heading}>Управление очередями</h2>
                 <div>
                     <label htmlFor="newQueueName" style={styles.label}>
                         Название очереди:
@@ -180,6 +150,22 @@ const AdminPanel = () => {
                 <button onClick={handleCreateQueue} style={styles.button}>
                     Создать очередь
                 </button>
+                <div style={styles.deleteQueueBlock}>
+                    <label htmlFor="queueIdToDelete" style={styles.label}>
+                        ID очереди для удаления:
+                    </label>
+                    <input
+                        type="text"
+                        id="queueIdToDelete"
+                        value={newQueue.id}
+                        onChange={handleNewQueueChange}
+                        name="id"
+                        style={styles.input}
+                    />
+                    <button onClick={handleDeleteQueue} style={styles.button}>
+                        Удалить очередь
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -215,6 +201,15 @@ const styles = {
         background: 'blue',
         transition: 'background 0.3s ease',
         marginBottom: '16px',
+    },
+    authBlock: {
+        marginBottom: '32px'
+    },
+    queueBlock: {
+        marginTop: '32px'
+    },
+    deleteQueueBlock: {
+        marginTop: '24px'
     }
 };
 
